@@ -1,11 +1,13 @@
 import p5 from 'p5';
+import Base from './Base';
 
 export function sketch(p: p5) {
+  Base.init(p);
   let x = 100;
   let y = 100;
 
   p.setup = function () {
-    p.createCanvas(700, 410);
+    Base.createFullScreenCanvas();
   };
 
   p.draw = function () {
