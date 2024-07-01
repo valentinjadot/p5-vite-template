@@ -1,16 +1,25 @@
 const SPACE_BETWEEN_PIXELS = 24;
 const PIXEL_SIZE = 24;
-const CAMERA_DISTANCE = 2000;
+const CAMERA_INITIAL_DISTANCE = 3000;
 
 const PIXEL_Z_AXIS_FACTOR = 3;
 const PIXEL_ZOOM_FACTOR = 10;
+const INITIAL_ROTATION_X = 4000;
+const ROTATION_X_STEP = 50;
+const CANERA_DISTANCE_STEP = 0.5;
 
 export function sketch(p) {
   let milei;
   let bombita;
   let canvas;
   let cam;
-  let zoom = 0;
+  let cameraDistance = CAMERA_INITIAL_DISTANCE;
+  let rotationX = INITIAL_ROTATION_X;
+  let font;
+
+  p.preload = function () {
+    font = p.loadFont('bombita.ttf');
+  };
 
   p.setup = function () {
     milei = p.loadImage('cropped-75.png');
@@ -19,10 +28,12 @@ export function sketch(p) {
     cam = p.createCamera();
 
     // Place the camera at the top-center.
-    cam.setPosition(0, 0, CAMERA_DISTANCE);
+    cam.setPosition(0, 0, CAMERA_INITIAL_DISTANCE);
 
     // Point the camera at the origin.
     cam.lookAt(0, 0, 0);
+
+    canvas.mouseWheel(moveCamera);
   };
 
   const drawFace = () => {
@@ -46,8 +57,11 @@ export function sketch(p) {
         );
 
         if (avg > 0) {
-          p.image(
-            bombita,
+          p.textSize((PIXEL_SIZE / avg) * PIXEL_ZOOM_FACTOR + PIXEL_SIZE);
+          p.textFont(font);
+          p.fill(0);
+          p.text(
+            'a',
             i * SPACE_BETWEEN_PIXELS,
             j * SPACE_BETWEEN_PIXELS,
             (PIXEL_SIZE / avg) * PIXEL_ZOOM_FACTOR + PIXEL_SIZE,
@@ -61,7 +75,16 @@ export function sketch(p) {
 
   p.draw = function () {
     drawFace();
-    zoom -= 10;
-    cam.setPosition(0, 0, CAMERA_DISTANCE + zoom);
+    cam.setPosition(rotationX, 0, cameraDistance);
+    cam.lookAt(0, 0, 0);
+    console.log(p.frameRate());
+  };
+
+  const moveCamera = function (event) {
+    event.preventDefault();
+
+    // if (Math.abs(event.deltaY) < 10) return;
+    cameraDistance -= event.deltaY * CANERA_DISTANCE_STEP;
+    rotationX = Math.max(rotationX - event.deltaY * ROTATION_X_STEP, 0);
   };
 }
