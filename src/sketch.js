@@ -2,11 +2,15 @@ const SPACE_BETWEEN_PIXELS = 24;
 const PIXEL_SIZE = 24;
 const CAMERA_INITIAL_DISTANCE = 3000;
 
-const PIXEL_Z_AXIS_FACTOR = 3;
-const PIXEL_ZOOM_FACTOR = 6;
-const INITIAL_ROTATION_X = 2000;
-const ROTATION_X_STEP = 1;
+const PIXEL_Z_AXIS_FACTOR = 4;
+const PIXEL_ZOOM_FACTOR = -10;
+const INITIAL_ROTATION_X = 8000;
+const ROTATION_X_STEP = 4;
 const CANERA_DISTANCE_STEP = 0.5;
+
+const BACKGOUND_COLOR = '#171717';
+const BOMBITAS_COLOR = '#00bd41';
+const TEXT_COLOR = '#F27BBD';
 
 export function sketch(p) {
   let milei;
@@ -18,24 +22,6 @@ export function sketch(p) {
   let font;
   let mileiPixels;
   let faceElements = [];
-
-  const frasesDeMilei = [
-    'Creo que el Estado es el enemigo, creo que el Estado es una asociación criminal…',
-    'Entre la mafia y el Estado prefiero a la mafia. La mafia tiene códigos, la mafia cumple, la mafia no miente, la mafia compite',
-    'La justicia social es aberrante',
-    'Para mí los impuestos son un robo',
-    'Cuando están en el poder nos tienen de esclavos',
-    'Digamos, o sea, que usted tiene una hija y de repente hay alguien que tiene una adicción a tener violación a mujeres y su hija es víctima. Entonces, ¿qué va a decir? No, hay que terminar con el sistema de coparticipación, hay que barrerlo',
-    'Algo que aportaría mucho es que se permitiera que las adopciones fueran un mercado libre y no un mercado regulado por el Estado. Vas a ver cómo aquellas que quedan embarazadas, aun cuando no quieren, van a encontrarle una salida a la situación',
-    'El Estado es el pedófilo en el jardín de infantes, con los nenes encadenados y bañados en vaselina. Y los políticos son los que ejecutan el Estado',
-    'La venta de órganos humanos es un mercado más',
-    'Nosotros valoramos la visión de memoria, verdad y justicia. Pero empecemos por la verdad: no fueron 30.000 desaparecidos, son 8.753',
-    'El calentamiento global es otra de las mentiras del socialismo. Hay toda una agenda de marxismo cultural (…). Hace 10 o 15 años se discutía que el planeta se iba a congelar, ahora discuten que se calienta',
-    'En mi gobierno no va a haber marxismo cultural y no voy a estar pidiendo perdón por tener pene. Si de mí dependiera, cerraría el Ministerio de la Mujer',
-    'Mi misión es cagar a patadas en el culo a keynesianos y colectivistas hijos de puta',
-    'Una empresa que contamina el río, ¿dónde está el daño?',
-    'No tengan miedo, den la batalla contra el zurderío, que se la vamos a ganar, somos superiores productivamente, somos superiores moralmente; esto no es para tibios, ¡viva la libertad carajo!',
-  ];
 
   p.preload = function () {
     font = p.loadFont('bombita.ttf');
@@ -55,7 +41,7 @@ export function sketch(p) {
     milei.loadPixels();
     mileiPixels = new Uint8ClampedArray(milei.pixels);
 
-    p.fill('blue');
+    p.noFill();
 
     createFace();
   };
@@ -100,14 +86,12 @@ export function sketch(p) {
   };
 
   p.draw = function () {
-    p.background('blue');
+    p.background(BACKGOUND_COLOR);
     p.orbitControl(3, 3, 3);
 
     animateFaceMovement();
 
     const probabilityToFlash = calculateProbability(cameraDistance);
-
-    console.log(probabilityToFlash);
 
     if (Math.random() < probabilityToFlash) {
       flashFace();
@@ -151,9 +135,9 @@ export function sketch(p) {
     return 1 - Math.exp(-k * Math.pow((z_max - z) / z_max, steepNess));
   }
   const flashFace = () => {
-    p.fill('white');
+    p.fill(BOMBITAS_COLOR);
     setTimeout(() => {
-      p.fill('blue');
+      p.noFill();
     }, 150);
   };
 }

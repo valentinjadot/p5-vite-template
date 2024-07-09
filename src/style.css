@@ -99,13 +99,28 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: #ffffff;
-  font-family: 'Courier';
-  color: #fff;
-  font-size: 12pt;
-  line-height: 10pt;
 }
 
 canvas {
   display: block;
+}
+
+#quote {
+  margin: 0;
+  padding: 0;
+
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -75%);
+  width: 80vw;
+  max-width: 80vw;
+
+  color: white;
+  text-align: center;
+  font-size: 3vw;
+  line-height: 1;
+  font-family: 'Times New Roman';
+
+  pointer-events: none;
 }
