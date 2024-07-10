@@ -95,6 +95,20 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+
+@font-face {
+  font-family: 'bombita';
+  src: url('/bombita.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Neu Haas Grotesk Display Pro';
+  src: url('/NHaasGroteskDSPro-65Md.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -110,17 +124,17 @@ canvas {
   padding: 0;
 
   position: absolute;
-  top: 75%;
+  top: 85%;
   left: 50%;
-  transform: translate(-50%, -75%);
+  transform: translate(-50%, -85%);
   width: 80vw;
   max-width: 80vw;
 
   color: white;
   text-align: center;
-  font-size: 3vw;
+  font-size: max(2vw, 16px);
   line-height: 1;
-  font-family: 'Times New Roman';
+  font-family: 'Neu Haas Grotesk Display Pro';
 
   pointer-events: none;
 }

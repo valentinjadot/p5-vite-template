@@ -1,12 +1,13 @@
 const SPACE_BETWEEN_PIXELS = 24;
 const PIXEL_SIZE = 24;
-const CAMERA_INITIAL_DISTANCE = 3000;
+const PIXEL_Z_AXIS_FACTOR = 3;
+const PIXEL_ZOOM_FACTOR = -5;
 
-const PIXEL_Z_AXIS_FACTOR = 4;
-const PIXEL_ZOOM_FACTOR = -10;
-const INITIAL_ROTATION_X = 8000;
-const ROTATION_X_STEP = 4;
-const CANERA_DISTANCE_STEP = 0.5;
+const CAMERA_INITIAL_DISTANCE = 2500;
+const CANERA_DISTANCE_STEP = 0.6;
+
+const INITIAL_ROTATION_X = 3000;
+const ROTATION_X_STEP = 2;
 
 const BACKGOUND_COLOR = '#171717';
 const BOMBITAS_COLOR = '#00bd41';
@@ -40,14 +41,28 @@ export function sketch(p) {
 
     milei.loadPixels();
     mileiPixels = new Uint8ClampedArray(milei.pixels);
-
-    p.noFill();
+    p.fill(BOMBITAS_COLOR);
 
     createFace();
   };
 
   const drawFace = () => {
     for (const element of faceElements) {
+      const probabilityToGlitch = calculateProbability(cameraDistance);
+      if (Math.random() > probabilityToGlitch) {
+        p.push();
+        p.fill(BOMBITAS_COLOR);
+        p.translate(
+          element.translate.x,
+          element.translate.y,
+          element.translate.z * p.random(-100, 100),
+        );
+        p.textFont(font);
+        p.textSize(element.textSize * 2);
+        p.text(element.text, element.x, element.y);
+        p.pop();
+      }
+
       p.push();
       p.translate(element.translate.x, element.translate.y, element.translate.z);
       p.textFont(font);
@@ -91,9 +106,8 @@ export function sketch(p) {
 
     animateFaceMovement();
 
-    const probabilityToFlash = calculateProbability(cameraDistance);
-
-    if (Math.random() < probabilityToFlash) {
+    const probabilityToGlitch = calculateProbability(cameraDistance);
+    if (Math.random() > probabilityToGlitch) {
       flashFace();
     }
 
@@ -131,13 +145,14 @@ export function sketch(p) {
     moveCamera({ deltaY: 10 });
   };
 
-  function calculateProbability(z, z_max = 4000, k = 5, steepNess = 3.5) {
+  function calculateProbability(z, z_max = 4000, k = 40, steepNess = 5) {
     return 1 - Math.exp(-k * Math.pow((z_max - z) / z_max, steepNess));
   }
+
   const flashFace = () => {
-    p.fill(BOMBITAS_COLOR);
+    p.noFill();
     setTimeout(() => {
-      p.noFill();
+      p.fill(BOMBITAS_COLOR);
     }, 150);
   };
 }
